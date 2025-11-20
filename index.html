@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LATENTIS - Cloud-Native Digitalisierung & Produktionsplanung</title>
+    <title>LATENTIS - Digital Engineering</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        /* --- DESIGN THEME --- */
         :root {
-            --bg-dark: #0f1419;
-            --bg-darker: #0a0e13;
+            --bg-dark: #05080a;
+            --bg-panel: rgba(15, 20, 25, 0.6);
             --point-primary: #1e3a5f;
             --point-accent: #4a9ead;
             --point-bright: #6dd5ed;
@@ -17,11 +18,7 @@
             --text-secondary: #9ca3af;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             background: var(--bg-dark);
@@ -32,20 +29,16 @@
         
         #waveCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0;
+            pointer-events: all; 
         }
         
-        .content {
-            position: relative;
-            z-index: 1;
-        }
+        .content { position: relative; z-index: 1; }
         
+        /* --- LOGO DESIGN --- */
         .hero-section {
-            min-height: 100vh;
+            min-height: 95vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -54,729 +47,396 @@
             padding: 2rem;
         }
         
-        .logo {
-            font-size: 4rem;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            background: linear-gradient(135deg, var(--point-bright), var(--point-accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo-container {
             margin-bottom: 1rem;
-            text-shadow: 0 0 40px rgba(109, 213, 237, 0.3);
+            position: relative;
         }
         
-        .tagline {
-            font-size: 1.5rem;
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #fff;
+            background: linear-gradient(180deg, #ffffff 20%, var(--point-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(74, 158, 173, 0.2);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        /* Der "Cursor" - das Symbol für Code & Action */
+        .logo-cursor {
+            display: inline-block;
+            width: 0.4em;
+            height: 0.12em;
+            background-color: var(--point-bright);
+            margin-left: 0.1em;
+            vertical-align: baseline;
+            box-shadow: 0 0 15px var(--point-bright);
+            /* NEUE DAUER: 2.5 Sekunden für ein ruhigeres Blinken */
+            animation: blink 2.5s infinite; 
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .vis-latentis {
+            font-size: 1.4rem;
             color: var(--point-bright);
-            margin-bottom: 1.5rem;
             font-weight: 300;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            border-bottom: 1px solid rgba(109, 213, 237, 0.3);
+            padding-bottom: 1rem;
         }
         
         .hero-description {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
             max-width: 700px;
             line-height: 1.8;
-            margin-bottom: 2.5rem;
+            font-weight: 300;
+            backdrop-filter: blur(3px);
         }
         
-        .cta-button {
-            background: linear-gradient(135deg, var(--point-accent), var(--point-bright));
-            color: var(--bg-dark);
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(109, 213, 237, 0.3);
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(109, 213, 237, 0.5);
-        }
-        
+        /* --- SECTIONS --- */
         .section {
-            background: rgba(15, 20, 25, 0.85);
-            backdrop-filter: blur(10px);
+            background: var(--bg-panel);
+            backdrop-filter: blur(15px);
             padding: 5rem 2rem;
-            margin: 0 auto;
-            max-width: 1200px;
-            border-radius: 20px;
+            margin: 0 auto 4rem;
+            max-width: 1100px;
+            border-radius: 4px;
+            border-left: 1px solid rgba(74, 158, 173, 0.2);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
         .section-title {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            color: #fff;
+            letter-spacing: 0.05em;
+        }
+        
+        .section-tag {
+            font-size: 0.9rem;
+            color: var(--point-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+        
+        /* --- VENTURE CARD --- */
+        .venture-showcase {
+            background: linear-gradient(145deg, rgba(30, 58, 95, 0.3), rgba(0,0,0,0.4));
+            border: 1px solid var(--point-accent);
+            padding: 3rem;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .venture-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--point-bright);
+            box-shadow: 0 0 20px var(--point-bright);
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(109, 213, 237, 0.1);
             color: var(--point-bright);
-            text-align: center;
-        }
-        
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 3rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-        }
-        
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .card {
-            background: rgba(30, 58, 95, 0.15);
-            border: 1px solid rgba(74, 154, 173, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(109, 213, 237, 0.5);
-            box-shadow: 0 10px 30px rgba(109, 213, 237, 0.2);
-        }
-        
-        .card-title {
-            font-size: 1.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: var(--point-bright);
-        }
-        
-        .card-text {
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-        
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-        }
-        
-        .tech-tag {
-            background: rgba(74, 154, 173, 0.2);
             border: 1px solid rgba(109, 213, 237, 0.3);
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            font-size: 0.95rem;
+        }
+        
+        .live-dot {
+            width: 8px; height: 8px;
+            background: var(--point-bright);
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--point-bright);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .venture-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid var(--point-accent);
+            padding-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        .venture-link:hover {
             color: var(--point-bright);
-            transition: all 0.3s ease;
+            border-bottom-color: var(--point-bright);
+        }
+
+        /* --- TECH GRID --- */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
         
-        .tech-tag:hover {
-            background: rgba(74, 154, 173, 0.3);
-            border-color: var(--point-bright);
+        .tech-item {
+            padding: 1.5rem;
+            border-left: 1px solid rgba(255,255,255,0.1);
         }
         
-        .about-section {
+        .tech-item h4 {
+            color: var(--point-bright);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .tech-item p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* --- CONTACT MINIMAL --- */
+        .contact-minimal {
             text-align: center;
             padding: 4rem 2rem;
         }
         
-        .about-text {
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            font-size: 1.1rem;
-            line-height: 1.9;
-            color: var(--text-secondary);
-        }
-        
-        .contact-section {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: rgba(30, 58, 95, 0.1);
-            margin-top: 3rem;
-        }
-        
-        .email-link {
+        .email-clean {
             font-size: 1.5rem;
-            color: var(--point-bright);
+            color: var(--text-primary);
             text-decoration: none;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s ease;
+            opacity: 0.7;
+            transition: opacity 0.3s;
         }
         
-        .email-link:hover {
-            border-bottom-color: var(--point-bright);
-        }
-        
-        .checkmark {
-            color: var(--point-bright);
-            margin-right: 0.5rem;
-        }
+        .email-clean:hover { opacity: 1; color: var(--point-bright); }
         
         @media (max-width: 768px) {
-            .logo {
-                font-size: 2.5rem;
-            }
-            
-            .tagline {
-                font-size: 1.2rem;
-            }
-            
-            .hero-description {
-                font-size: 1.1rem;
-            }
-            
-            .section {
-                padding: 3rem 1.5rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
+            .logo { font-size: 3rem; }
+            .logo-cursor { width: 0.3em; height: 0.1em; }
+            .vis-latentis { font-size: 1rem; }
+            .section { padding: 3rem 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- 3D Wave Canvas -->
     <div id="waveCanvas"></div>
     
-    <!-- Content -->
     <div class="content">
-        <!-- Hero Section -->
+        
         <section class="hero-section">
-            <h1 class="logo">LATENTIS</h1>
-            <p class="tagline">Vis Latentis – Die Kraft des Verborgenen</p>
+            <div class="logo-container">
+                <h1 class="logo">LATENTIS<span class="logo-cursor"></span></h1>
+            </div>
+            <p class="vis-latentis">Vis Latentis – Die Kraft des Verborgenen</p>
             <p class="hero-description">
-                Ich mache implizites Wissen explizit. Von komplexen Industrieproblemen zu 
-                intelligenten Cloud-Lösungen – ich verstehe, formalisiere und automatisiere.
+                Digital Engineering & Ventures.<br>
+                Ich entwickle autonome Systeme und intelligente Tools, die Komplexität in Einfachheit verwandeln.
             </p>
-            <a href="#contact" class="cta-button">Projekt starten</a>
         </section>
         
-        <!-- Main Content Sections -->
-        <div style="padding: 0 1rem;">
-            <!-- Was ich mache -->
-            <section class="section">
-                <h2 class="section-title">High-Level Custom Problem Solving</h2>
-                <p class="section-subtitle">
-                    Wirtschaftsingenieur, Data Scientist, Cloud Architect – mit 4 Jahren Erfahrung 
-                    in der Lösung komplexer Industrieprobleme durch intelligente Automatisierung.
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Current Venture</h2>
+                <span class="section-tag">Social Impact / AI Agent</span>
+            </div>
+            
+            <div class="venture-showcase">
+                <div class="live-indicator">
+                    <div class="live-dot"></div> LIVE PROTOTYPE
+                </div>
+                <h3 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; color: #fff;">stopvertrag.de</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    Ein KI-basierter Sprachassistent, der Menschen hilft, Verträge mühelos zu kündigen – ganz ohne Formulare, Bürokratiedeutsch oder Papierkram. Nutzer schicken einfach ein Foto oder eine Sprachnachricht, der Agent erkennt alle relevanten Daten automatisch, erstellt die Kündigung und verschickt sie rechtssicher an den Anbieter.<br>
+                    <span style="color:var(--point-bright);">Soforthilfe für alle, die beim „Papierkram" sonst verloren wären – besonders für Migranten und ältere Menschen.</span>
                 </p>
-                
-                <div class="cards-grid">
-                    <div class="card">
-                        <h3 class="card-title">Vom Problem zur Lösung</h3>
-                        <p class="card-text">
-                            Ich analysiere komplexe Industrieprozesse, verstehe die Domain-Logik 
-                            und übersetze sie in funktionierende Systeme. Von der Produktionsplanung 
-                            bis zum Wissensmanagementsystem – ich baue, was funktioniert.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Cloud-Native Architecture</h3>
-                        <p class="card-text">
-                            Azure Data Factory, Logic Apps, Functions – ich entwerfe und implementiere 
-                            Cloud-Architekturen, die skalieren. Data Flows visualisieren, 
-                            Entscheidungen automatisieren, Systeme integrieren.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Intelligente Algorithmen</h3>
-                        <p class="card-text">
-                            <strong>Monte Carlo Tree Search (MCTS)</strong> für Produktionsplanung und Truck Loading. 
-                            Nicht nur Daten verschieben – sondern optimale Entscheidungen durch 
-                            bewährte KI-Algorithmen treffen lassen.
-                        </p>
-                    </div>
-                </div>
-            </section>
+                <ul style="margin-bottom: 2rem; color: var(--text-secondary); list-style: none;">
+                    <li style="margin-bottom: 0.5rem;">✓ WhatsApp-Style Voice Interface – sofort verständlich für jeden</li>
+                    <li style="margin-bottom: 0.5rem;">✓ 100% automatisierte Datenextraktion und Dokumenterstellung</li>
+                    <li style="margin-bottom: 0.5rem;">✓ Verschickt, unterschreibt und bestätigt – alles voll digital</li>
+                    <li style="margin-bottom: 0.5rem;">✓ DSGVO-konform, keine Registrierung nötig</li>
+                    <li>✓ Live im Einsatz, von echten Menschen genutzt</li>
+                </ul>
+                <a href="https://stopvertrag.de" target="_blank" class="venture-link">View Project &rarr;</a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Engineering Foundation</h2>
+                <span class="section-tag">Under the Hood</span>
+            </div>
             
-            <!-- Technologie Stack -->
-            <section class="section">
-                <h2 class="section-title">Hintergrund & Expertise</h2>
-                
-                <div class="cards-grid">
-                    <div class="card">
-                        <h3 class="card-title">Ausbildung & Foundation</h3>
-                        <p class="card-text">
-                            <strong>Master Wirtschaftsingenieurwesen</strong> – technisches Verständnis 
-                            kombiniert mit Business-Perspektive.<br><br>
-                            <strong>Data Science Bootcamp</strong> – modernste ML/AI-Methoden und praktische Anwendung.<br><br>
-                            <strong>4 Jahre Industrie-Erfahrung</strong> – High-Level Custom Problem Solving für komplexe Fertigungsprozesse.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">Cloud & Automation</h3>
-                        <p class="card-text">
-                            <strong>Azure Data Factory</strong> – Datenflüsse designen, Entscheidungen visualisieren<br>
-                            <strong>Logic Apps & Functions</strong> – Serverless Architekturen<br>
-                            <strong>SharePoint & Microsoft 365</strong> – Digitalisierung für Organisationen<br>
-                            <strong>Cloud-Native Design</strong> – Skalierbare, wartbare Systeme
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">AI & Optimization</h3>
-                        <p class="card-text">
-                            <strong>Monte Carlo Tree Search (MCTS)</strong> – Produktionsplanung & Truck Loading<br>
-                            <strong>LLM Early Adopter</strong> – Eigene Tools mit GPT/Claude entwickelt<br>
-                            <strong>Whisper Integration</strong> – Speech-to-Text Workflows<br>
-                            <strong>Prompt Engineering</strong> – JSON-basierte Bibliotheken für optimierte Outputs
-                        </p>
-                    </div>
+            <div style="margin-bottom: 3rem;">
+                <p style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.8;">
+                    Meine Projekte basieren auf Enterprise-Architekturen und industriellen Standards. Was im Kleinen funktioniert, ist für Skalierung gebaut.
+                </p>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4>Algorithmic Planning</h4>
+                    <p>Anwendung von <strong>MCTS (Monte Carlo Tree Search)</strong> zur Lösung dynamischer Optimierungsprobleme (Produktionsplanung, Scheduling).</p>
                 </div>
                 
-                <div style="margin-top: 3rem; text-align: center;">
-                    <h3 style="color: var(--point-bright); font-size: 1.3rem; margin-bottom: 1.5rem;">Tech Stack:</h3>
+                <div class="tech-item">
+                    <h4>Cloud Native Architecture</h4>
+                    <p>Skalierbare Backend-Logik mit <strong>Azure Data Factory</strong>, Serverless Functions und robusten Data Pipelines.</p>
                 </div>
                 
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">FastAPI</span>
-                    <span class="tech-tag">Azure Data Factory</span>
-                    <span class="tech-tag">Azure Functions</span>
-                    <span class="tech-tag">Logic Apps</span>
-                    <span class="tech-tag">MCTS Algorithmen</span>
-                    <span class="tech-tag">LLM Integration</span>
-                    <span class="tech-tag">Whisper API</span>
-                    <span class="tech-tag">SharePoint</span>
-                    <span class="tech-tag">Cloud-Native</span>
-                    <span class="tech-tag">Data Science</span>
-                    <span class="tech-tag">Optimization</span>
+                <div class="tech-item">
+                    <h4>Knowledge Engineering</h4>
+                    <p>Vom impliziten "Expertenwissen" zum expliziten Code. Formalisierung von Entscheidungsprozessen für reproduzierbare Ergebnisse.</p>
                 </div>
-            </section>
-            
-            <!-- Für wen -->
-            <section class="section">
-                <h2 class="section-title">Wie ich arbeite</h2>
-                
-                <div style="max-width: 800px; margin: 0 auto; text-align: left;">
-                    <p style="font-size: 1.2rem; line-height: 2; color: var(--text-secondary); margin-bottom: 2rem;">
-                        Meistens sagen die Kunden: "Du könntest jetzt hier anfangen zu arbeiten." 
-                        Aber ich bin schon im nächsten Projekt. Das Wissen ist digitalisiert, 
-                        die Automatisierung läuft, die Logik ist in Code gegossen.
-                    </p>
-                    
-                    <h3 style="color: var(--point-bright); font-size: 1.4rem; margin-bottom: 1.5rem; margin-top: 3rem;">
-                        Ich helfe Ihnen, wenn:
-                    </h3>
-                    
-                    <p style="font-size: 1.15rem; line-height: 2; color: var(--text-secondary); margin-bottom: 1rem;">
-                        <span class="checkmark">✓</span> Ihr Prozess-Wissen in Köpfen steckt, nicht in Systemen
-                    </p>
-                    <p style="font-size: 1.15rem; line-height: 2; color: var(--text-secondary); margin-bottom: 1rem;">
-                        <span class="checkmark">✓</span> Sie komplexe Entscheidungen treffen müssen (Planung, Routing, Optimierung)
-                    </p>
-                    <p style="font-size: 1.15rem; line-height: 2; color: var(--text-secondary); margin-bottom: 1rem;">
-                        <span class="checkmark">✓</span> Excel an seine Grenzen stößt, aber Sie keine IT-Abteilung haben
-                    </p>
-                    <p style="font-size: 1.15rem; line-height: 2; color: var(--text-secondary);">
-                        <span class="checkmark">✓</span> Sie jemanden brauchen, der versteht UND umsetzt – nicht nur berät
-                    </p>
-                </div>
-            </section>
-            
-            <!-- Projekte & Use Cases -->
-            <section class="section">
-                <h2 class="section-title">Ausgewählte Projekte</h2>
-                
-                <div class="cards-grid">
-                    <div class="card">
-                        <h3 class="card-title">🏭 MCTS Produktionsoptimierung</h3>
-                        <p class="card-text">
-                            Monte Carlo Tree Search für komplexe Produktionsplanung und Truck Loading. 
-                            Intelligente Algorithmen, die optimale Entscheidungen in hochdimensionalen 
-                            Suchräumen finden – nicht heuristisch, sondern mathematisch fundiert.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">☁️ Wissensmanagementsystem</h3>
-                        <p class="card-text">
-                            Azure Data Factory basiertes System zur Visualisierung von Entscheidungsflüssen. 
-                            Implizites Wissen wird explizit – durch strukturierte Data Flows in der Cloud, 
-                            die zeigen, wie Entscheidungen getroffen werden.
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">🤖 LLM Tool Suite</h3>
-                        <p class="card-text">
-                            <strong>JSON Prompt Library:</strong> Bibliothek zur optimalen Anpassung von Texten in E-Mails<br>
-                            <strong>Whisper Tool:</strong> Speech-to-Text für persönliche Produktivität am PC<br>
-                            <strong>Senior Helper Agent:</strong> Automatisierte Kündigungen – Daten extrahieren, 
-                            PDF erstellen, unterschreiben, versenden
-                        </p>
-                    </div>
-                    
-                    <div class="card">
-                        <h3 class="card-title">🏢 Vereins-Digitalisierung</h3>
-                        <p class="card-text">
-                            Beratung und Umsetzung für Vereine: SharePoint-Setup, Software-Auswahl, 
-                            Digitalisierungsstrategien. Von der Anforderungsanalyse bis zur fertigen Lösung.
-                        </p>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Über mich -->
-            <section class="about-section">
-                <h2 class="section-title">Mein Ansatz</h2>
-                
-                <div class="about-text">
-                    <p style="margin-bottom: 1.5rem; font-size: 1.2rem; color: var(--point-bright);">
-                        <strong>Pragmatisch. Technisch fundiert. Schnell.</strong>
-                    </p>
-                    
-                    <p style="margin-bottom: 1.5rem;">
-                        Mit einem Master in Wirtschaftsingenieurwesen und einem Data Science Bootcamp 
-                        bringe ich technisches Verständnis und Business-Perspektive zusammen. 
-                        4 Jahre Erfahrung in der Industrie haben mir gezeigt: Die besten Lösungen 
-                        sind die, die funktionieren.
-                    </p>
-                    
-                    <p style="margin-bottom: 1.5rem;">
-                        Ich tauche tief in Probleme ein, verstehe die Domain-Logik, und baue dann 
-                        Systeme, die nicht nur technisch elegant sind, sondern echte Probleme lösen. 
-                        Von MCTS-basierten Optimierungen bis zu Cloud-Native Architekturen – 
-                        ich wähle die richtigen Tools für das Problem.
-                    </p>
-                    
-                    <p style="margin-bottom: 1.5rem;">
-                        Als Early Adopter von LLM-Technologien entwickle ich nicht nur für Kunden, 
-                        sondern auch eigene Tools: Prompt-Optimierung, Speech-to-Text Integration, 
-                        Automatisierungs-Agents. Ich bleibe am Puls der Zeit, ohne Hype-Getrieben zu sein.
-                    </p>
-                    
-                    <p style="color: var(--point-bright); font-size: 1.15rem; font-weight: 600; margin-top: 2rem;">
-                        LATENTIS – Ich mache verborgenes Wissen explizit und automatisierbar.
-                    </p>
-                </div>
-            </section>
-        </div>
-        
-        <!-- Contact Section -->
-        <section id="contact" class="contact-section">
-            <h2 class="section-title">Projekt besprechen?</h2>
-            <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2rem;">
-                Lassen Sie uns herausfinden, wie ich Ihre Produktionsplanung digitalisieren kann.
+            </div>
+        </section>
+
+        <section id="contact" class="contact-minimal">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 1.1rem;">
+                Engineer. Maker. Problem Solver.
             </p>
-            <a href="mailto:info@latentis.de" class="email-link">info@latentis.de</a>
-            
-            <p style="margin-top: 3rem; color: var(--text-secondary);">
-                Oder direkt einen Termin vereinbaren
-            </p>
+            <a href="mailto:info@latentis.de" class="email-clean">info@latentis.de</a>
         </section>
         
-        <!-- Footer -->
-        <footer style="text-align: center; padding: 3rem 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-            <p>&copy; 2025 LATENTIS. Alle Rechte vorbehalten.</p>
+        <footer style="text-align: center; padding: 2rem; color: rgba(255,255,255,0.1); font-size: 0.8rem;">
+            &copy; 2025 LATENTIS
         </footer>
     </div>
 
     <script>
-        // Three.js 3D Grid Wave Simulation
-        
         const isMobile = window.innerWidth < 768;
-        const GRID_SIZE_X = isMobile ? 30 : 50;  // Width
-        const GRID_SIZE_Y = isMobile ? 40 : 65;  // Height - more vertical points!
-        const SPACING = isMobile ? 1.5 : 1.3;
-        const WAVE_AMPLITUDE = 2.0;  // Gentler
-        const WAVE_SPEED = 0.08;  // MUCH slower - half of previous
-        const WAVE_FREQUENCY = 0.25;  // Lower frequency for broader wave
-        const SPRING_STRENGTH = 0.015;  // Even gentler spring for smoother motion
-        const DAMPING = 0.94;  // More damping for ultra-smooth motion
         
-        // Setup scene
+        const GRID_COLS = isMobile ? 25 : 50;  
+        const GRID_ROWS = isMobile ? 35 : 60;  
+        const SPACING = 1.3;
+        
+        const WAVE_SPEED = 0.0012;      
+        const WAVE_FREQ = 0.1;          
+        const WAVE_AMP = 1.5;           
+        
         const scene = new THREE.Scene();
-        scene.fog = new THREE.Fog(0x0f1419, 10, 50);
+        scene.fog = new THREE.FogExp2(0x05080a, 0.015); 
         
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 25, 40);  // Higher and further for taller grid
-        camera.lookAt(0, 0, 0);
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 20, 50);
+        camera.lookAt(0, -5, 0);
         
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x0f1419, 1);
+        renderer.setClearColor(0x05080a, 1);
         document.getElementById('waveCanvas').appendChild(renderer.domElement);
         
-        // Create grid of spheres with different X/Y dimensions
-        const gridNodes = [];
-        const geometry = new THREE.SphereGeometry(0.12, 12, 12);
+        const points = [];
+        const geometry = new THREE.SphereGeometry(0.08, 8, 8); 
+        const material = new THREE.MeshBasicMaterial({ color: 0x4a9ead });
         
-        for (let i = 0; i < GRID_SIZE_Y; i++) {
-            gridNodes[i] = [];
-            for (let j = 0; j < GRID_SIZE_X; j++) {
-                const material = new THREE.MeshBasicMaterial({ 
-                    color: 0x4a9ead,
-                    transparent: true,
-                    opacity: 0.6
-                });
+        for (let z = 0; z < GRID_ROWS; z++) {
+            points[z] = [];
+            const depthRatio = z / GRID_ROWS;
+            const spreadFactor = 1.0 + (depthRatio * 1.2); 
+            
+            for (let x = 0; x < GRID_COLS; x++) {
+                const mesh = new THREE.Mesh(geometry, material.clone());
+                const xPos = (x - GRID_COLS / 2) * SPACING * spreadFactor;
+                const zPos = (z - GRID_ROWS / 2) * SPACING * 1.1;
                 
-                const sphere = new THREE.Mesh(geometry, material);
-                const x = (j - GRID_SIZE_X / 2) * SPACING;
-                const z = (i - GRID_SIZE_Y / 2) * SPACING;
+                mesh.position.set(xPos, 0, -zPos);
                 
-                sphere.position.set(x, 0, z);
-                sphere.userData = {
-                    baseY: 0,
-                    gridX: j,
-                    gridZ: i,
-                    velocity: 0,
-                    displacement: 0
+                mesh.userData = {
+                    originX: xPos,
+                    originZ: -zPos,
+                    phaseOffset: Math.sqrt(xPos*xPos + zPos*zPos) * 0.1 
                 };
                 
-                scene.add(sphere);
-                gridNodes[i][j] = sphere;
+                scene.add(mesh);
+                points[z][x] = mesh;
             }
         }
         
-        // Create grid lines
-        const lineMaterial = new THREE.LineBasicMaterial({ 
-            color: 0x4a9ead, 
-            transparent: true, 
-            opacity: 0.25 
-        });
-        
-        // Horizontal lines
-        for (let i = 0; i < GRID_SIZE_Y; i++) {
-            const points = [];
-            for (let j = 0; j < GRID_SIZE_X; j++) {
-                points.push(gridNodes[i][j].position);
-            }
-            const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-            const line = new THREE.Line(lineGeometry, lineMaterial);
-            line.userData = { isGridLine: true, row: i, horizontal: true };
-            scene.add(line);
-        }
-        
-        // Vertical lines
-        for (let j = 0; j < GRID_SIZE_X; j++) {
-            const points = [];
-            for (let i = 0; i < GRID_SIZE_Y; i++) {
-                points.push(gridNodes[i][j].position);
-            }
-            const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-            const line = new THREE.Line(lineGeometry, lineMaterial);
-            line.userData = { isGridLine: true, col: j, horizontal: false };
-            scene.add(line);
-        }
-        
-        // Wave sources
-        const waves = [];
-        
-        class Wave {
-            constructor(x, z, time) {
-                this.originX = x;
-                this.originZ = z;
-                this.startTime = time;
-                this.speed = WAVE_SPEED;
-                this.amplitude = WAVE_AMPLITUDE;
-                this.frequency = WAVE_FREQUENCY;
-            }
-            
-            getDisplacement(x, z, time) {
-                const elapsed = time - this.startTime;
-                const dx = x - this.originX;
-                const dz = z - this.originZ;
-                const distance = Math.sqrt(dx * dx + dz * dz);
-                
-                const phase = distance * this.frequency - elapsed * this.speed;
-                // Much longer attenuation so wave travels fully across
-                const maxDist = Math.max(GRID_SIZE_X, GRID_SIZE_Y) * 1.5;
-                const attenuation = Math.max(0, 1 - distance / maxDist);
-                
-                if (elapsed > 0 && attenuation > 0) {
-                    return Math.sin(phase) * this.amplitude * attenuation;
-                }
-                return 0;
-            }
-            
-            isExpired(time) {
-                const elapsed = time - this.startTime;
-                // Allow wave to fully traverse the larger grid
-                const maxDist = Math.max(GRID_SIZE_X, GRID_SIZE_Y);
-                return elapsed > maxDist * 8;
-            }
-        }
-        
-        // Add random waves periodically
-        let time = 0;
-        let lastWaveTime = -200;
-        let waveStep = 0;  // Current step in the 12-step cycle
-        const TOTAL_STEPS = 24;  // 12 steps around top, 12 steps down right side
-        
-        function getWaveOrigin(step) {
-            // Divide the perimeter into smooth transitions
-            // Steps 0-11: Top edge, left to right
-            // Steps 12-23: Right edge, top to bottom
-            
-            if (step < 12) {
-                // Top edge: left to right
-                const progress = step / 11;  // 0 to 1
-                const x = Math.floor(progress * (GRID_SIZE_X - 1));
-                const z = 0;
-                return { x, z };
-            } else {
-                // Right edge: top to bottom
-                const progress = (step - 12) / 11;  // 0 to 1
-                const x = GRID_SIZE_X - 1;
-                const z = Math.floor(progress * (GRID_SIZE_Y - 1));
-                return { x, z };
-            }
-        }
-        
-        // Mouse interaction
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        
-        renderer.domElement.addEventListener('click', (event) => {
+        const mouse = new THREE.Vector2(10000, 10000);
+        document.addEventListener('mousemove', (event) => {
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            
-            raycaster.setFromCamera(mouse, camera);
-            
-            // Find closest grid point
-            let minDist = Infinity;
-            let closestX = 0, closestZ = 0;
-            
-            for (let i = 0; i < GRID_SIZE_Y; i++) {
-                for (let j = 0; j < GRID_SIZE_X; j++) {
-                    const node = gridNodes[i][j];
-                    const dist = raycaster.ray.distanceToPoint(node.position);
-                    if (dist < minDist) {
-                        minDist = dist;
-                        closestX = j;
-                        closestZ = i;
-                    }
-                }
-            }
-            
-            waves.push(new Wave(closestX, closestZ, time));
         });
         
-        // Animation loop
+        let time = 0;
+        
         function animate() {
             requestAnimationFrame(animate);
-            time += 0.5;
+            time += WAVE_SPEED;
             
-            // Add single continuous wave from edge
-            if (time - lastWaveTime > 400) {  // Much longer interval for calm, contemplative effect
-                const origin = getWaveOrigin(waveStep);
-                waves.push(new Wave(origin.x, origin.z, time));
-                
-                waveStep = (waveStep + 1) % TOTAL_STEPS;  // Cycle through 24 steps
-                lastWaveTime = time;
-            }
+            const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+            vector.unproject(camera);
+            const dir = vector.sub(camera.position).normalize();
+            const distance = -camera.position.y / dir.y;
+            const mousePos = camera.position.clone().add(dir.multiplyScalar(distance));
             
-            // Keep only one wave active
-            if (waves.length > 1) {
-                waves.shift();
-            }
-            
-            // Update grid nodes with gentler physics
-            for (let i = 0; i < GRID_SIZE_Y; i++) {
-                for (let j = 0; j < GRID_SIZE_X; j++) {
-                    const node = gridNodes[i][j];
-                    let totalDisplacement = 0;
+            for (let z = 0; z < GRID_ROWS; z++) {
+                for (let x = 0; x < GRID_COLS; x++) {
+                    const p = points[z][x];
                     
-                    // Sum all wave contributions
-                    waves.forEach(wave => {
-                        totalDisplacement += wave.getDisplacement(j, i, time);
-                    });
+                    const wave1 = Math.sin(p.userData.originX * 0.1 + time * 2);
+                    const wave2 = Math.cos(p.userData.originZ * 0.08 + time * 2.5);
                     
-                    // Gentler spring physics for smooth movement
-                    const force = (totalDisplacement - node.userData.displacement) * SPRING_STRENGTH;
-                    node.userData.velocity += force;
-                    node.userData.velocity *= DAMPING;
-                    node.userData.displacement += node.userData.velocity;
+                    let targetY = (wave1 + wave2) * WAVE_AMP * 0.6;
                     
-                    node.position.y = node.userData.displacement;
+                    const dx = p.position.x - mousePos.x;
+                    const dz = p.position.z - mousePos.z;
+                    const dist = Math.sqrt(dx*dx + dz*dz);
                     
-                    // Subtle color based on displacement
-                    const intensity = Math.min(1, Math.abs(node.userData.displacement) / WAVE_AMPLITUDE);
-                    if (intensity > 0.6) {
-                        node.material.color.setHex(0x6dd5ed); // Bright cyan at peak
-                        node.material.opacity = 0.8;
-                    } else {
-                        node.material.color.setHex(0x4a9ead);
-                        node.material.opacity = 0.4 + intensity * 0.3;
+                    if (dist < 12) {
+                        const mouseForce = Math.cos(dist * 0.2) * 2; 
+                        targetY += mouseForce * (1 - dist/12);
                     }
+                    
+                    p.position.y += (targetY - p.position.y) * 0.03;
+                    
+                    const heightFactor = (p.position.y + 2) / 5;
+                    p.material.color.setHSL(0.58, 0.7, 0.15 + heightFactor * 0.4);
+                    
+                    const scale = 0.8 + heightFactor * 0.5;
+                    p.scale.set(scale, scale, scale);
                 }
             }
-            
-            // Update grid lines
-            scene.children.forEach(child => {
-                if (child.userData.isGridLine) {
-                    const positions = child.geometry.attributes.position;
-                    if (child.userData.horizontal) {
-                        const row = child.userData.row;
-                        for (let j = 0; j < GRID_SIZE_X; j++) {
-                            positions.array[j * 3 + 1] = gridNodes[row][j].position.y;
-                        }
-                    } else {
-                        const col = child.userData.col;
-                        for (let i = 0; i < GRID_SIZE_Y; i++) {
-                            positions.array[i * 3 + 1] = gridNodes[i][col].position.y;
-                        }
-                    }
-                    positions.needsUpdate = true;
-                }
-            });
-            
-            // Remove expired waves
-            for (let i = waves.length - 1; i >= 0; i--) {
-                if (waves[i].isExpired(time)) {
-                    waves.splice(i, 1);
-                }
-            }
-            
-            // Very gentle rotation for depth perception
-            camera.position.x = Math.sin(time * 0.0003) * 2;  // Even slower, more subtle
-            camera.lookAt(0, 0, 0);
-            
-            // Scroll-based camera adjustment
-            const scrollPercent = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
-            camera.position.y = 25 + scrollPercent * 12;  // Higher for taller grid
-            camera.position.z = 40 - scrollPercent * 6;
             
             renderer.render(scene, camera);
         }
         
         animate();
         
-        // Handle resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
         });
     </script>
 </body>
