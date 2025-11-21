@@ -47,8 +47,75 @@
             padding: 2rem;
         }
         
-        .logo-container {
+        /* Wrapper für Logo und Text zusammen */
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 1rem;
+        }
+        
+        /* Container für zwei Logos nebeneinander */
+        .logos-comparison {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        /* Container Größe & Grund-Glow */
+        .logo-container {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1rem; /* Abstand zum Text */
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.3));
+        }
+        
+        .logo-container h4 {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
+        
+        /* Linien-Stil & Zeichen-Animation */
+        .logo-path {
+            stroke: #38bdf8;       /* Cyan Accent Color */
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300; /* Startet "unsichtbar" - wird per JS animiert */
+            /* Animation wird dynamisch per JavaScript gesetzt */
+        }
+        
+        /* Knotenpunkte (Ecken) - Animation wird per JS gesetzt */
+        .logo-node {
+            fill: #38bdf8;
+            opacity: 0;
+            /* Animation wird dynamisch per JavaScript gesetzt, wenn Linie fertig ist */
+        }
+        
+        /* Keyframes für die Animationen */
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { filter: drop-shadow(0 0 2px rgba(56, 189, 248, 0.3)); }
+            50% { filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)); }
+            100% { filter: drop-shadow(0 0 2px rgba(56, 189, 248, 0.3)); }
+        }
+        
+        .logo-text-container {
             position: relative;
         }
         
@@ -245,6 +312,22 @@
             .logo-cursor { width: 0.3em; height: 0.1em; }
             .vis-latentis { font-size: 1rem; }
             .section { padding: 3rem 1.5rem; }
+            
+            /* Logos für Mobile: kleiner und enger zusammen */
+            .logos-comparison {
+                gap: 0.5rem; /* Statt 2rem - viel enger */
+                flex-wrap: wrap; /* Falls nötig umbrechen */
+            }
+            
+            .logo-container {
+                width: 70px; /* Statt 120px - kleiner */
+                height: 70px; /* Statt 120px - kleiner */
+            }
+            
+            .logo-container h4 {
+                font-size: 0.65rem; /* Statt 0.8rem - kleinere Schrift */
+                margin-top: 0.3rem;
+            }
         }
     </style>
 </head>
@@ -254,10 +337,674 @@
     <div class="content">
         
         <section class="hero-section">
-            <div class="logo-container">
-                <h1 class="logo">LATENTIS<span class="logo-cursor"></span></h1>
+            <div class="logo-wrapper">
+                <div class="logos-comparison">
+                    <!-- Linkes Logo: Random Jump Algorithmus -->
+                    <div class="logo-container" id="logo-random">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" data-algorithm="random">
+                            <g transform="translate(50,50)">
+                                <!-- Äußeres Hexagon -->
+                                <path class="logo-path" d="M0,-40 L34.6,-20 L34.6,20 L0,40 L-34.6,20 L-34.6,-20 Z" />
+                                
+                                <!-- Inneres Hexagon (halb so groß) -->
+                                <path class="logo-path" d="M0,-20 L17.3,-10 L17.3,10 L0,20 L-17.3,10 L-17.3,-10 Z" opacity="0.7" />
+                                
+                                <!-- Verbindungslinien (Outer to Inner) -->
+                                <line class="logo-path" x1="0" y1="-40" x2="0" y2="-20" />
+                                <line class="logo-path" x1="34.6" y1="-20" x2="17.3" y2="-10" />
+                                <line class="logo-path" x1="34.6" y1="20" x2="17.3" y2="10" />
+                                <line class="logo-path" x1="0" y1="40" x2="0" y2="20" />
+                                <line class="logo-path" x1="-34.6" y1="20" x2="-17.3" y2="10" />
+                                <line class="logo-path" x1="-34.6" y1="-20" x2="-17.3" y2="-10" />
+                                <!-- Äußere Knotenpunkte -->
+                                <circle class="logo-node" data-node="outer_top" cx="0" cy="-40" r="3" />
+                                <circle class="logo-node" data-node="outer_right_top" cx="34.6" cy="-20" r="3" />
+                                <circle class="logo-node" data-node="outer_right_bottom" cx="34.6" cy="20" r="3" />
+                                <circle class="logo-node" data-node="outer_bottom" cx="0" cy="40" r="3" />
+                                <circle class="logo-node" data-node="outer_left_bottom" cx="-34.6" cy="20" r="3" />
+                                <circle class="logo-node" data-node="outer_left_top" cx="-34.6" cy="-20" r="3" />
+                                <!-- Innere Knotenpunkte -->
+                                <circle class="logo-node" data-node="inner_top" cx="0" cy="-20" r="3" />
+                                <circle class="logo-node" data-node="inner_right_top" cx="17.3" cy="-10" r="3" />
+                                <circle class="logo-node" data-node="inner_right_bottom" cx="17.3" cy="10" r="3" />
+                                <circle class="logo-node" data-node="inner_bottom" cx="0" cy="20" r="3" />
+                                <circle class="logo-node" data-node="inner_left_bottom" cx="-17.3" cy="10" r="3" />
+                                <circle class="logo-node" data-node="inner_left_top" cx="-17.3" cy="-10" r="3" />
+                            </g>
+                        </svg>
+                        <h4>Greedy</h4>
+                    </div>
+                    
+                    <!-- Rechtes Logo: Graph Hops Algorithmus -->
+                    <div class="logo-container" id="logo-graph-hops">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" data-algorithm="graph-hops">
+                            <g transform="translate(50,50)">
+                                <!-- Äußeres Hexagon -->
+                                <path class="logo-path" d="M0,-40 L34.6,-20 L34.6,20 L0,40 L-34.6,20 L-34.6,-20 Z" />
+                                
+                                <!-- Inneres Hexagon (halb so groß) -->
+                                <path class="logo-path" d="M0,-20 L17.3,-10 L17.3,10 L0,20 L-17.3,10 L-17.3,-10 Z" opacity="0.7" />
+                                
+                                <!-- Verbindungslinien (Outer to Inner) -->
+                                <line class="logo-path" x1="0" y1="-40" x2="0" y2="-20" />
+                                <line class="logo-path" x1="34.6" y1="-20" x2="17.3" y2="-10" />
+                                <line class="logo-path" x1="34.6" y1="20" x2="17.3" y2="10" />
+                                <line class="logo-path" x1="0" y1="40" x2="0" y2="20" />
+                                <line class="logo-path" x1="-34.6" y1="20" x2="-17.3" y2="10" />
+                                <line class="logo-path" x1="-34.6" y1="-20" x2="-17.3" y2="-10" />
+                                <!-- Äußere Knotenpunkte -->
+                                <circle class="logo-node" data-node="outer_top" cx="0" cy="-40" r="3" />
+                                <circle class="logo-node" data-node="outer_right_top" cx="34.6" cy="-20" r="3" />
+                                <circle class="logo-node" data-node="outer_right_bottom" cx="34.6" cy="20" r="3" />
+                                <circle class="logo-node" data-node="outer_bottom" cx="0" cy="40" r="3" />
+                                <circle class="logo-node" data-node="outer_left_bottom" cx="-34.6" cy="20" r="3" />
+                                <circle class="logo-node" data-node="outer_left_top" cx="-34.6" cy="-20" r="3" />
+                                <!-- Innere Knotenpunkte -->
+                                <circle class="logo-node" data-node="inner_top" cx="0" cy="-20" r="3" />
+                                <circle class="logo-node" data-node="inner_right_top" cx="17.3" cy="-10" r="3" />
+                                <circle class="logo-node" data-node="inner_right_bottom" cx="17.3" cy="10" r="3" />
+                                <circle class="logo-node" data-node="inner_bottom" cx="0" cy="20" r="3" />
+                                <circle class="logo-node" data-node="inner_left_bottom" cx="-17.3" cy="10" r="3" />
+                                <circle class="logo-node" data-node="inner_left_top" cx="-17.3" cy="-10" r="3" />
+                            </g>
+                        </svg>
+                        <h4>Graph Hops</h4>
+                    </div>
+                    
+                    <!-- Drittes Logo: Snake Path Algorithmus -->
+                    <div class="logo-container" id="logo-snake-path">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" data-algorithm="snake-path">
+                            <g transform="translate(50,50)">
+                                <!-- Äußeres Hexagon -->
+                                <path class="logo-path" d="M0,-40 L34.6,-20 L34.6,20 L0,40 L-34.6,20 L-34.6,-20 Z" />
+                                
+                                <!-- Inneres Hexagon (halb so groß) -->
+                                <path class="logo-path" d="M0,-20 L17.3,-10 L17.3,10 L0,20 L-17.3,10 L-17.3,-10 Z" opacity="0.7" />
+                                
+                                <!-- Verbindungslinien (Outer to Inner) -->
+                                <line class="logo-path" x1="0" y1="-40" x2="0" y2="-20" />
+                                <line class="logo-path" x1="34.6" y1="-20" x2="17.3" y2="-10" />
+                                <line class="logo-path" x1="34.6" y1="20" x2="17.3" y2="10" />
+                                <line class="logo-path" x1="0" y1="40" x2="0" y2="20" />
+                                <line class="logo-path" x1="-34.6" y1="20" x2="-17.3" y2="10" />
+                                <line class="logo-path" x1="-34.6" y1="-20" x2="-17.3" y2="-10" />
+                                <!-- Äußere Knotenpunkte -->
+                                <circle class="logo-node" data-node="outer_top" cx="0" cy="-40" r="3" />
+                                <circle class="logo-node" data-node="outer_right_top" cx="34.6" cy="-20" r="3" />
+                                <circle class="logo-node" data-node="outer_right_bottom" cx="34.6" cy="20" r="3" />
+                                <circle class="logo-node" data-node="outer_bottom" cx="0" cy="40" r="3" />
+                                <circle class="logo-node" data-node="outer_left_bottom" cx="-34.6" cy="20" r="3" />
+                                <circle class="logo-node" data-node="outer_left_top" cx="-34.6" cy="-20" r="3" />
+                                <!-- Innere Knotenpunkte -->
+                                <circle class="logo-node" data-node="inner_top" cx="0" cy="-20" r="3" />
+                                <circle class="logo-node" data-node="inner_right_top" cx="17.3" cy="-10" r="3" />
+                                <circle class="logo-node" data-node="inner_right_bottom" cx="17.3" cy="10" r="3" />
+                                <circle class="logo-node" data-node="inner_bottom" cx="0" cy="20" r="3" />
+                                <circle class="logo-node" data-node="inner_left_bottom" cx="-17.3" cy="10" r="3" />
+                                <circle class="logo-node" data-node="inner_left_top" cx="-17.3" cy="-10" r="3" />
+                            </g>
+                        </svg>
+                        <h4>Snake Path</h4>
+                    </div>
+                </div>
+                <div class="logo-text-container">
+                    <h1 class="logo">LATENTIS<span class="logo-cursor"></span></h1>
+                </div>
             </div>
             <p class="vis-latentis">Vis Latentis – Die Kraft des Verborgenen</p>
+            
+            <script>
+            // Greedy Logo Drawing Algorithm - Funktion für drei Logos
+            function initLogoAnimation(svgElement, algorithmType = 'greedy') {
+                const svg = svgElement;
+                const group = svg.querySelector('g');
+                
+                // Knotenpunkte definieren
+                const nodes = {
+                    'outer_top': { x: 0, y: -40, connections: [] },
+                    'outer_right_top': { x: 34.6, y: -20, connections: [] },
+                    'outer_right_bottom': { x: 34.6, y: 20, connections: [] },
+                    'outer_bottom': { x: 0, y: 40, connections: [] },
+                    'outer_left_bottom': { x: -34.6, y: 20, connections: [] },
+                    'outer_left_top': { x: -34.6, y: -20, connections: [] },
+                    'inner_top': { x: 0, y: -20, connections: [] },
+                    'inner_right_top': { x: 17.3, y: -10, connections: [] },
+                    'inner_right_bottom': { x: 17.3, y: 10, connections: [] },
+                    'inner_bottom': { x: 0, y: 20, connections: [] },
+                    'inner_left_bottom': { x: -17.3, y: 10, connections: [] },
+                    'inner_left_top': { x: -17.3, y: -10, connections: [] }
+                };
+                
+                // Hilfsfunktion: Findet Knoten an Koordinaten
+                function findNode(x, y, tolerance = 0.1) {
+                    for (const [key, node] of Object.entries(nodes)) {
+                        if (Math.abs(node.x - x) < tolerance && Math.abs(node.y - y) < tolerance) {
+                            return key;
+                        }
+                    }
+                    return null;
+                }
+                
+                // Segmente extrahieren - Paths in einzelne Linien aufteilen
+                const segments = [];
+                const paths = group.querySelectorAll('.logo-path');
+                
+                paths.forEach((path) => {
+                    if (path.tagName === 'line') {
+                        // Line-Element: direkt verwenden
+                        const x1 = parseFloat(path.getAttribute('x1'));
+                        const y1 = parseFloat(path.getAttribute('y1'));
+                        const x2 = parseFloat(path.getAttribute('x2'));
+                        const y2 = parseFloat(path.getAttribute('y2'));
+                        const startNode = findNode(x1, y1);
+                        const endNode = findNode(x2, y2);
+                        
+                        if (startNode && endNode) {
+                            segments.push({
+                                element: path,
+                                startNode,
+                                endNode,
+                                drawn: false,
+                                order: -1
+                            });
+                        }
+                    } else if (path.tagName === 'path') {
+                        // Path-Element (Hexagone): in einzelne Linien aufteilen
+                        const d = path.getAttribute('d');
+                        const points = [];
+                        
+                        // Koordinaten extrahieren
+                        const coordMatches = d.match(/([-\d.]+),?\s*([-\d.]+)/g);
+                        if (coordMatches) {
+                            coordMatches.forEach(coord => {
+                                const match = coord.match(/([-\d.]+),?\s*([-\d.]+)/);
+                                if (match) {
+                                    points.push({ x: parseFloat(match[1]), y: parseFloat(match[2]) });
+                                }
+                            });
+                            
+                            // Für jedes Segment des Hexagons eine Linie erstellen
+                            for (let i = 0; i < points.length; i++) {
+                                const p1 = points[i];
+                                const p2 = points[(i + 1) % points.length]; // Geschlossen
+                                
+                                const startNode = findNode(p1.x, p1.y);
+                                const endNode = findNode(p2.x, p2.y);
+                                
+                                if (startNode && endNode) {
+                                    // Erstelle ein <line> Element für dieses Segment
+                                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                                    line.setAttribute('x1', p1.x);
+                                    line.setAttribute('y1', p1.y);
+                                    line.setAttribute('x2', p2.x);
+                                    line.setAttribute('y2', p2.y);
+                                    line.setAttribute('class', 'logo-path');
+                                    line.style.opacity = path.style.opacity || '1';
+                                    
+                                    group.appendChild(line);
+                                    
+                                    segments.push({
+                                        element: line,
+                                        startNode,
+                                        endNode,
+                                        drawn: false,
+                                        order: -1
+                                    });
+                                }
+                            }
+                            
+                            // Originales Path-Element entfernen
+                            path.remove();
+                        }
+                    }
+                });
+                
+                // Graph aufbauen: Verbindungen zwischen Knoten und Segmenten
+                segments.forEach((seg, idx) => {
+                    nodes[seg.startNode].connections.push(idx);
+                    nodes[seg.endNode].connections.push(idx);
+                });
+                
+                // Analysiere Knotengrade (für Eulerian Path/Circuit Check)
+                function getNodeDegree(nodeKey) {
+                    return nodes[nodeKey].connections.length;
+                }
+                
+                function canDrawWithoutJumps() {
+                    // Eulerian Circuit: Alle Knoten müssen geraden Grad haben
+                    // Eulerian Path: Genau 2 Knoten müssen ungeraden Grad haben
+                    const degrees = Object.keys(nodes).map(key => getNodeDegree(key));
+                    const oddDegreeNodes = degrees.filter(d => d % 2 === 1).length;
+                    
+                    if (oddDegreeNodes === 0) {
+                        console.log('✅ Eulerian Circuit möglich - alle Knoten haben geraden Grad');
+                        return true; // Eulerian Circuit
+                    } else if (oddDegreeNodes === 2) {
+                        console.log('✅ Eulerian Path möglich - genau 2 Knoten mit ungeradem Grad');
+                        return true; // Eulerian Path
+                    } else {
+                        console.log(`❌ Kein Eulerian Path/Circuit möglich - ${oddDegreeNodes} Knoten haben ungeraden Grad`);
+                        console.log('   (Ein Eulerian Path/Circuit benötigt 0 oder 2 Knoten mit ungeradem Grad)');
+                        console.log('   → Sprünge sind mathematisch notwendig!');
+                        return false; // Muss springen
+                    }
+                }
+                
+                // Check beim Laden
+                const eulerianPossible = canDrawWithoutJumps();
+                
+                // Greedy Drawing Algorithm
+                const DRAW_DURATION = 0.6; // Sekunden pro Segment (25% langsamer für ruhigere Animation)
+                const drawOrder = [];
+                let currentOrder = 0;
+                
+                function getAvailableSegmentsFromNode(nodeKey) {
+                    return nodes[nodeKey].connections
+                        .map(idx => segments[idx])
+                        .filter(seg => !seg.drawn);
+                }
+                
+                // Graph-Hop Distanz berechnen (BFS - Breadth-First Search)
+                function getGraphDistance(fromNodeKey, toNodeKey) {
+                    if (fromNodeKey === toNodeKey) return 0;
+                    
+                    // BFS: Finde kürzesten Pfad zwischen zwei Knoten
+                    const queue = [{ node: fromNodeKey, distance: 0 }];
+                    const visited = new Set([fromNodeKey]);
+                    
+                    while (queue.length > 0) {
+                        const { node, distance } = queue.shift();
+                        
+                        // Finde alle Nachbarn dieses Knotens (über Segmente)
+                        const neighborNodes = new Set();
+                        nodes[node].connections.forEach(segIdx => {
+                            const seg = segments[segIdx];
+                            if (seg.startNode === node) {
+                                neighborNodes.add(seg.endNode);
+                            } else {
+                                neighborNodes.add(seg.startNode);
+                            }
+                        });
+                        
+                        // Prüfe alle Nachbarn
+                        for (const neighbor of neighborNodes) {
+                            if (neighbor === toNodeKey) {
+                                return distance + 1; // Gefunden!
+                            }
+                            
+                            if (!visited.has(neighbor)) {
+                                visited.add(neighbor);
+                                queue.push({ node: neighbor, distance: distance + 1 });
+                            }
+                        }
+                    }
+                    
+                    return Infinity; // Nicht erreichbar (sollte nicht passieren in zusammenhängendem Graph)
+                }
+                
+                // Finde nächsten freien Segment basierend auf Graph-Hops
+                function getNearestUnconnectedSegment(fromNodeKey) {
+                    const undrawn = segments.filter(seg => !seg.drawn);
+                    if (undrawn.length === 0) return null;
+                    
+                    // Wenn kein fromNode (Start), dann random
+                    if (!fromNodeKey) {
+                        return undrawn[Math.floor(Math.random() * undrawn.length)];
+                    }
+                    
+                    // Berechne Distanz zu allen freien Segmenten
+                    let minDistance = Infinity;
+                    let nearestSegment = null;
+                    
+                    for (const seg of undrawn) {
+                        // Distanz zum Start-Knoten des Segments
+                        const distToStart = getGraphDistance(fromNodeKey, seg.startNode);
+                        // Distanz zum End-Knoten des Segments
+                        const distToEnd = getGraphDistance(fromNodeKey, seg.endNode);
+                        // Nimm die minimale Distanz
+                        const minDist = Math.min(distToStart, distToEnd);
+                        
+                        if (minDist < minDistance) {
+                            minDistance = minDist;
+                            nearestSegment = seg;
+                        }
+                    }
+                    
+                    return nearestSegment;
+                }
+                
+                // Funktion zum Finden eines neuen Segments basierend auf Algorithmus-Typ
+                function getNextSegment(fromNodeKey) {
+                    if (algorithmType === 'graph-hops') {
+                        return getNearestUnconnectedSegment(fromNodeKey);
+                    } else if (algorithmType === 'snake-path') {
+                        // Snake Path: Backtracking wird im Hauptalgorithmus behandelt
+                        // Hier nur Fallback: nächstes freies Segment
+                        return getNearestUnconnectedSegment(fromNodeKey);
+                    } else {
+                        // Greedy: zufälliges Segment, unabhängig von Distanz
+                        const undrawn = segments.filter(seg => !seg.drawn);
+                        if (undrawn.length === 0) return null;
+                        return undrawn[Math.floor(Math.random() * undrawn.length)];
+                    }
+                }
+                
+                // Snake Path: Backtracking Funktion
+                function findBacktrackPoint() {
+                    // Suche rückwärts in allen gezeichneten Segmenten für einen Knoten mit freien Optionen
+                    // Beginne beim letzten Segment und gehe rückwärts
+                    for (let i = drawOrder.length - 1; i >= 0; i--) {
+                        const seg = drawOrder[i];
+                        const atStart = getAvailableSegmentsFromNode(seg.startNode);
+                        const atEnd = getAvailableSegmentsFromNode(seg.endNode);
+                        
+                        if (atStart.length > 0 || atEnd.length > 0) {
+                            // Gefunden: Knoten mit Optionen
+                            return {
+                                segment: seg,
+                                node: atStart.length > 0 ? seg.startNode : seg.endNode,
+                                availableSegments: [...atStart, ...atEnd],
+                                index: i
+                            };
+                        }
+                    }
+                    return null; // Kein Backtrack-Punkt gefunden
+                }
+                
+                // Hauptalgorithmus
+                function greedyDraw() {
+                    if (algorithmType === 'snake-path') {
+                        // Snake Path Algorithmus mit Backtracking
+                        const path = []; // Aktueller Pfad für Backtracking
+                        let current = getNextSegment(null);
+                        if (!current) return;
+                        let fromNode = null;
+                        
+                        while (segments.some(s => !s.drawn)) {
+                            if (!current) {
+                                // Sackgasse erreicht - Backtracking
+                                const backtrack = findBacktrackPoint();
+                                if (!backtrack) {
+                                    // Kein Backtrack möglich, springe zu freiem Segment
+                                    const undrawn = segments.filter(seg => !seg.drawn);
+                                    if (undrawn.length === 0) break;
+                                    current = undrawn[Math.floor(Math.random() * undrawn.length)];
+                                    fromNode = null;
+                                    path.length = 0; // Reset Path
+                                } else {
+                                    // Zurückgehen zum Backtrack-Punkt
+                                    // Kürze den Pfad bis zum Backtrack-Punkt
+                                    // Segmente bleiben gezeichnet, wir gehen nur visuell zurück
+                                    const backtrackIdx = path.indexOf(backtrack.segment);
+                                    if (backtrackIdx >= 0) {
+                                        path.splice(backtrackIdx + 1);
+                                    }
+                                    
+                                    // Jetzt am Backtrack-Punkt - wähle freies Segment
+                                    current = backtrack.availableSegments[0];
+                                    fromNode = backtrack.node;
+                                }
+                                if (!current) break;
+                            }
+                            
+                            // Bestimme Richtung
+                            if (fromNode !== null) {
+                                if (fromNode === current.endNode) {
+                                    current.fromNode = current.endNode;
+                                    current.toNode = current.startNode;
+                                } else {
+                                    current.fromNode = current.startNode;
+                                    current.toNode = current.endNode;
+                                }
+                            } else {
+                                current.fromNode = Math.random() < 0.5 ? current.startNode : current.endNode;
+                                current.toNode = current.fromNode === current.startNode ? current.endNode : current.startNode;
+                            }
+                            
+                            // Markiere Segment
+                            current.drawn = true;
+                            current.order = currentOrder++;
+                            drawOrder.push(current);
+                            path.push(current); // Zum Pfad hinzufügen
+                            
+                            // Wichtig: Snake Path geht IMMER vom Ankunftspunkt (toNode) weiter
+                            // Solange dort freie Optionen sind, gehen wir weiter
+                            const drawnToNode = current.toNode; // Ankunftspunkt - hier sind wir jetzt
+                            const atArrival = getAvailableSegmentsFromNode(drawnToNode); // Freie Segmente am Ankunftspunkt
+                            
+                            if (atArrival.length > 0) {
+                                // Es gibt freie Optionen am Ankunftspunkt - gehe weiter von dort
+                                current = atArrival[Math.floor(Math.random() * atArrival.length)];
+                                fromNode = drawnToNode; // Wir kommen vom Ankunftspunkt
+                            } else {
+                                // Sackgasse am Ankunftspunkt - Backtracking nötig
+                                // Suche kontinuierlich im Pfad nach einem Knoten mit freien Optionen
+                                let foundOption = false;
+                                let currentSearchNode = drawnToNode; // Starte am aktuellen Standpunkt
+                                
+                                // Gehe rückwärts durch den Pfad (durch bereits gezeichnete Segmente)
+                                for (let i = path.length - 1; i >= 0; i--) {
+                                    const pathSeg = path[i];
+                                    
+                                    // Prüfe ob wir von currentSearchNode zu diesem Segment kommen können
+                                    const canReachStart = (pathSeg.startNode === currentSearchNode);
+                                    const canReachEnd = (pathSeg.endNode === currentSearchNode);
+                                    
+                                    if (canReachStart || canReachEnd) {
+                                        // Wir können zu diesem Segment - prüfe beide Enden auf freie Optionen
+                                        const pathAtStart = getAvailableSegmentsFromNode(pathSeg.startNode);
+                                        const pathAtEnd = getAvailableSegmentsFromNode(pathSeg.endNode);
+                                        
+                                        if (pathAtStart.length > 0) {
+                                            // Weiter von pathSeg.startNode
+                                            current = pathAtStart[0];
+                                            fromNode = pathSeg.startNode;
+                                            // Kürze Pfad bis zu diesem Punkt (visuelles Zurückgehen)
+                                            path.splice(i + 1);
+                                            foundOption = true;
+                                            break;
+                                        } else if (pathAtEnd.length > 0) {
+                                            // Weiter von pathSeg.endNode
+                                            current = pathAtEnd[0];
+                                            fromNode = pathSeg.endNode;
+                                            // Kürze Pfad bis zu diesem Punkt (visuelles Zurückgehen)
+                                            path.splice(i + 1);
+                                            foundOption = true;
+                                            break;
+                                        } else {
+                                            // Keine Optionen hier, gehe zum anderen Ende des Segments
+                                            currentSearchNode = canReachStart ? pathSeg.endNode : pathSeg.startNode;
+                                        }
+                                    }
+                                }
+                                
+                                if (!foundOption) {
+                                    // Wirklich Sackgasse - Backtracking nötig
+                                    current = null;
+                                }
+                            }
+                        }
+                        return;
+                    }
+                    
+                    // Greedy oder Graph Hops Algorithmus (original)
+                    // Start: Random Segment oder Nearest Segment
+                    let current = getNextSegment(null);
+                    if (!current) return;
+                    let fromNode = null; // Von welchem Knoten kommen wir (null = zufälliger Start)
+                    
+                    while (segments.some(s => !s.drawn)) {
+                        if (!current) {
+                            // Keine Verbindung gefunden, springe zum nächsten freien Segment
+                            // Verwende den letzten Knoten, falls vorhanden
+                            const lastNode = drawOrder.length > 0 ? drawOrder[drawOrder.length - 1].toNode : null;
+                            current = getNextSegment(lastNode);
+                            fromNode = null; // Neuer Startpunkt
+                            if (!current) break;
+                        }
+                        
+                        // Bestimme, von welchem Knoten aus wir diese Linie zeichnen
+                        // Wenn fromNode gesetzt ist, zeichnen wir vom kommenden Knoten aus
+                        if (fromNode !== null) {
+                            // Linie umdrehen, falls nötig, damit sie vom richtigen Knoten aus startet
+                            if (fromNode === current.endNode) {
+                                // Wir kommen von endNode, also Linie umdrehen
+                                current.fromNode = current.endNode;
+                                current.toNode = current.startNode;
+                            } else {
+                                // Wir kommen von startNode, Linie bleibt so
+                                current.fromNode = current.startNode;
+                                current.toNode = current.endNode;
+                            }
+                        } else {
+                            // Zufälliger Start, wähle zufällige Richtung
+                            current.fromNode = Math.random() < 0.5 ? current.startNode : current.endNode;
+                            current.toNode = current.fromNode === current.startNode ? current.endNode : current.startNode;
+                        }
+                        
+                        // Markiere aktuelles Segment
+                        current.drawn = true;
+                        current.order = currentOrder++;
+                        drawOrder.push(current);
+                        
+                        // Speichere das gerade gezeichnete Segment (vor dem Überschreiben)
+                        const drawnSegment = current;
+                        const drawnToNode = drawnSegment.toNode; // Knoten, an dem wir angekommen sind
+                        
+                        // Finde nächste freie Segmente an beiden Enden des aktuellen Segments
+                        const atStart = getAvailableSegmentsFromNode(current.startNode);
+                        const atEnd = getAvailableSegmentsFromNode(current.endNode);
+                        
+                        // Bestimme, von welchem Knoten wir weitermachen (toNode des gerade gezeichneten Segments)
+                        let nextFromNode = null;
+                        
+                        // Greedy Logik: Wenn ein Knoten "leer" ist (alle Verbindungen gezeichnet),
+                        // gehen wir zur anderen Seite weiter, falls dort noch Optionen sind
+                        if (atStart.length === 0 && atEnd.length > 0) {
+                            // Start-Knoten ist leer, weiter am End-Knoten (toNode)
+                            current = atEnd[Math.floor(Math.random() * atEnd.length)];
+                            nextFromNode = drawnToNode; // Wir kommen vom toNode des gerade gezeichneten Segments
+                        } else if (atEnd.length === 0 && atStart.length > 0) {
+                            // End-Knoten ist leer, weiter am Start-Knoten (fromNode)
+                            current = atStart[Math.floor(Math.random() * atStart.length)];
+                            nextFromNode = drawnSegment.fromNode; // Wir kommen vom fromNode des gerade gezeichneten Segments
+                        } else if (atStart.length > 0 || atEnd.length > 0) {
+                            // Beide Knoten haben noch freie Verbindungen, wähle random
+                            const options = [...atStart, ...atEnd];
+                            current = options[Math.floor(Math.random() * options.length)];
+                            // Bestimme von welchem Knoten wir kommen (toNode des gerade gezeichneten Segments)
+                            // Prüfe, ob der toNode des gerade gezeichneten Segments am startNode oder endNode des neuen Segments ist
+                            if (current.startNode === drawnToNode) {
+                                nextFromNode = current.startNode;
+                            } else if (current.endNode === drawnToNode) {
+                                nextFromNode = current.endNode;
+                            } else {
+                                // Nicht direkt verbunden (sollte nicht passieren), wähle random
+                                nextFromNode = Math.random() < 0.5 ? current.startNode : current.endNode;
+                            }
+                        } else {
+                            // Beide Knoten sind leer (Sackgasse), springe zum nächsten freien Segment
+                            // Verwende den toNode des gerade gezeichneten Segments als Ausgangspunkt
+                            current = getNextSegment(drawnToNode);
+                            nextFromNode = null; // Neuer Startpunkt
+                        }
+                        
+                        fromNode = nextFromNode;
+                    }
+                }
+                
+                // Algorithmus ausführen
+                greedyDraw();
+                
+                // Track, welche Knoten bereits animiert wurden
+                const animatedNodes = new Set();
+                
+                // Animation anwenden - berechne stroke-dasharray basierend auf Linienlänge
+                drawOrder.forEach((segment, idx) => {
+                    const delay = idx * DRAW_DURATION;
+                    const el = segment.element;
+                    
+                    // Hole ursprüngliche Koordinaten
+                    let x1 = parseFloat(el.getAttribute('x1'));
+                    let y1 = parseFloat(el.getAttribute('y1'));
+                    let x2 = parseFloat(el.getAttribute('x2'));
+                    let y2 = parseFloat(el.getAttribute('y2'));
+                    
+                    // Wenn fromNode gesetzt ist, drehe Linie um, damit sie vom richtigen Knoten aus startet
+                    if (segment.fromNode && segment.toNode) {
+                        // Finde die Positionen der Knoten
+                        const fromX = nodes[segment.fromNode].x;
+                        const fromY = nodes[segment.fromNode].y;
+                        
+                        // Prüfe, ob Linie umgedreht werden muss (x1/y1 sollte am fromNode sein)
+                        const tolerance = 0.1;
+                        const x1AtFrom = Math.abs(x1 - fromX) < tolerance && Math.abs(y1 - fromY) < tolerance;
+                        const x2AtFrom = Math.abs(x2 - fromX) < tolerance && Math.abs(y2 - fromY) < tolerance;
+                        
+                        if (!x1AtFrom && x2AtFrom) {
+                            // Linie ist falsch herum (x2 ist am fromNode statt x1), drehe sie um
+                            [x1, x2] = [x2, x1];
+                            [y1, y2] = [y2, y1];
+                            el.setAttribute('x1', x1);
+                            el.setAttribute('y1', y1);
+                            el.setAttribute('x2', x2);
+                            el.setAttribute('y2', y2);
+                        }
+                    }
+                    
+                    // Berechne Linienlänge
+                    const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+                    
+                    // Setze stroke-dasharray und offset basierend auf Länge
+                    el.style.strokeDasharray = length;
+                    el.style.strokeDashoffset = length;
+                    
+                    // Animation (drawLine Keyframe existiert bereits im CSS)
+                    el.style.animation = `drawLine ${DRAW_DURATION}s ease-out ${delay}s forwards, pulse 4s infinite ${delay + DRAW_DURATION + 0.5}s`;
+                    
+                    // Knotenpunkte animieren: Sie erscheinen beim ersten Mal, wenn sie berührt werden
+                    // Start-Knoten erscheint sofort beim Start der Linien-Animation
+                    if (segment.fromNode && !animatedNodes.has(segment.fromNode)) {
+                        const startNodeCircle = group.querySelector(`.logo-node[data-node="${segment.fromNode}"]`);
+                        if (startNodeCircle) {
+                            startNodeCircle.style.animation = `fadeIn 0.3s ease-out ${delay}s forwards`;
+                            animatedNodes.add(segment.fromNode);
+                        }
+                    }
+                    
+                    // End-Knoten erscheint erst, wenn die Linie ihn erreicht hat (nach DRAW_DURATION)
+                    const lineEndDelay = delay + DRAW_DURATION;
+                    if (segment.toNode && !animatedNodes.has(segment.toNode)) {
+                        const endNodeCircle = group.querySelector(`.logo-node[data-node="${segment.toNode}"]`);
+                        if (endNodeCircle) {
+                            endNodeCircle.style.animation = `fadeIn 0.3s ease-out ${lineEndDelay}s forwards`;
+                            animatedNodes.add(segment.toNode);
+                        }
+                    }
+                });
+            }
+            
+            // Drei Logos initialisieren
+            (function() {
+                // Linkes Logo: Greedy
+                const leftSvg = document.querySelector('#logo-random svg');
+                if (leftSvg) {
+                    initLogoAnimation(leftSvg, 'greedy');
+                }
+                
+                // Mittleres Logo: Graph Hops
+                const middleSvg = document.querySelector('#logo-graph-hops svg');
+                if (middleSvg) {
+                    initLogoAnimation(middleSvg, 'graph-hops');
+                }
+                
+                // Rechtes Logo: Snake Path
+                const rightSvg = document.querySelector('#logo-snake-path svg');
+                if (rightSvg) {
+                    initLogoAnimation(rightSvg, 'snake-path');
+                }
+            })();
+            </script>
             <p class="hero-description">
                 Digital Engineering & Ventures.<br>
                 Ich entwickle autonome Systeme und intelligente Tools, die Komplexität in Einfachheit verwandeln.
@@ -335,13 +1082,13 @@
     <script>
         const isMobile = window.innerWidth < 768;
         
-        const GRID_COLS = isMobile ? 25 : 50;  
-        const GRID_ROWS = isMobile ? 35 : 60;  
+        const GRID_COLS = isMobile ? 30 : 50;  
+        const GRID_ROWS = isMobile ? 105 : 60; // 3x mehr Zeilen für Mobile (35 * 3 = 105)  
         const SPACING = 1.3;
         
-        const WAVE_SPEED = 0.0012;      
+        const WAVE_SPEED = 0.0022;      
         const WAVE_FREQ = 0.1;          
-        const WAVE_AMP = 1.5;           
+        const WAVE_AMP = 2.5;           
         
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x05080a, 0.015); 
